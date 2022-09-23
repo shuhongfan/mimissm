@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+         https://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--不建议 导入-->
+    <!--<import resource="classpath:applicationContext_dao.xml"/>-->
+<!--    首先设定业务逻辑层的包扫描器，目的是在指定的路径下，使用 @Service注解的类，spring负责创建对象，并添加依赖-->
+    <context:component-scan base-package="com.shf.service"/>
+<!--    设置事务管理器 DataSourceTransactionManager-->
+    <bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--这里爆红没关系-->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+<!--    添加事务的切面-->
+    <!--这里 id不能写 interceptor-->
+    <tx:advice id="transactionInterceptor" transaction-manager="dataSourceTransactionManager">
+        <tx:attributes>
+            <tx:method name="*select*" read-only="true"/>
+            <tx:method name="*find*" read-only="true"/>
+            <tx:method name="*get*" read-only="true"/>
+            <tx:method name="*search*" read-only="true"/>
+            <!--增删改必须支持事务-->
+            <tx:method name="*insert*" propagation="REQUIRED"/>
+            <tx:method name="*save*" propagation="REQUIRED"/>
+            <tx:method name="*add*" propagation="REQUIRED"/>
+            <tx:method name="*delete*" propagation="REQUIRED"/>
+            <tx:method name="*remove*" propagation="REQUIRED"/>
+            <tx:method name="*clear*" propagation="REQUIRED"/>
+            <tx:method name="*update*" propagation="REQUIRED"/>
+            <tx:method name="*modify*" propagation="REQUIRED"/>
+            <tx:method name="*change*" propagation="REQUIRED"/>
+            <tx:method name="*set*" propagation="REQUIRED"/>
+            <!--不包含的也支持事务-->
+            <tx:method name="*" propagation="SUPPORTS"/>
+        </tx:attributes>
+    </tx:advice>
+<!--    完成切面和切入点的织入-->
+    <aop:config>
+        <aop:pointcut id="interceptor" expression="execution(* com.shf..service.*.*(..))"/>
+        <!--绑定-->
+        <aop:advisor advice-ref="transactionInterceptor" pointcut-ref="interceptor"/>
+    </aop:config>
+
+</beans>
