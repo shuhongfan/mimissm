@@ -50,7 +50,7 @@
     </script>
     <script type="text/javascript">
         function myclose(ispage) {
-            window.location = "${pageContext.request.contextPath}/admin/product?flag=split&ispage=" + ispage;
+            window.location = "${pageContext.request.contextPath}/prod/split.action?flag=split&ispage=" + ispage;
             //window.close();
         }
     </script>

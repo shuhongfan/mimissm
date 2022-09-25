@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @author shkstart
- * @create 2021-08-23 11:12
- */
+
 @Controller
 @RequestMapping("/admin")
 public class AdminAction {

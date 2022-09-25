@@ -20,10 +20,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author shkstart
- * @create 2021-09-15 18:05
- */
+
 @Controller
 @RequestMapping("/prod")
 public class ProductInfoAction {
